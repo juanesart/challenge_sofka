@@ -3,6 +3,8 @@ from modules.clsCarril import crearCarril
 from modules.clsAuto import Auto, crearAutos
 from .clsJugador import *
 from .clsPista import Pista
+import csv
+import pickle
 
 class Juego:
     def __init__(self, id):
@@ -10,7 +12,7 @@ class Juego:
 
     def comenzarJuego(self):
         print('el juego numero ', self.id, ' ha comenzado')
-        nJugadores = input('ingresa el numero de jugadores: ')
+        nJugadores = input('ingresa el numero de jugadores, minimo 3: ')
         pista = Pista(int(nJugadores))
         jugadores = []
         conductores = []
@@ -19,6 +21,8 @@ class Juego:
         recorridos = []
         podio = 0
         ganadores = []
+        ganador = []
+        registro = []
         for i in range(int(nJugadores)):
             jugadores.append(crearJugadores(i)) 
         for i in jugadores:
@@ -31,7 +35,7 @@ class Juego:
             recorridos.append(0)
         while(podio < 3):
             for i in carriles:
-                if(recorridos[i.id] < 5000):
+                if(recorridos[i.id] < 2000):
                     recorridos[i.id] = recorridos[i.id] + avanzar(i.id)
                 elif(podio != 0):
                     if(i in ganadores):
@@ -43,5 +47,10 @@ class Juego:
                 else:
                     podio = podio + 1
                     ganadores.append(i)
-                    print('Felicidades el jugador {} queda en {} lugar'.format(i.id, podio))            
-        print(recorridos)
+                    print('Felicidades el jugador {} queda en {} lugar'.format(i.id, podio))
+        for i in ganadores:
+            ganador.append(i.jugador)
+        with open('records.csv', 'w') as f:
+            csv_writer = csv.writer(f, delimiter=' ')
+            csv_writer.writerows(ganador)
+        print('Gracias por jugar')

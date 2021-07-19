@@ -1,4 +1,5 @@
 from modules.clsJuego import Juego
+import csv
 
 print('Bienbenido a Cars Rasing')
 
@@ -14,6 +15,7 @@ if int(seleccion) == 1:
     juego = Juego(1)
     juego.comenzarJuego()
 elif int(seleccion) == 2:
-    verHistorial()
-
-
+    with open('records.csv', 'r') as f:
+        csv_reader = csv.reader(f)
+        for line in csv_reader:
+            print(line)
